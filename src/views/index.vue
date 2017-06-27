@@ -10,21 +10,30 @@
 
     .banner {
         height: 60px;
+        margin-top: 20px;
+    }
+
+    .menu {
+        padding-top: 100px;
+        position: fixed;
+        height: 100%;
+        background-color: #f8f8f9!important;
+    }
+
+    .menu .ivu-menu-light {
+        background-color: transparent !important;
+    }
+
+    .menu .ivu-menu-vertical.ivu-menu-light:after {
+        width: 0;
     }
 </style>
 <template>
     <div class="index">
-        <Row>
-            <i-col :span="24">
-                <div class="banner">
-                    <h1>管理系统</h1>
-                </div>
-            </i-col>
-        </Row>
         <Row type="flex">
-            <i-col :span="4">
-                <h2>机器人列表
-                    <Button @click="addBot">添加一个</Button>
+            <i-col :span="3" class="menu">
+                <h2 style="padding-bottom: 12px">机器人列表
+                    <Button @click="addBot" size="small">添加一个</Button>
                 </h2>
                 <Menu width="auto" @on-select="setCurrentBot" :active-name="currentBot">
                     <Menu-item v-for="item in bots"
@@ -32,7 +41,10 @@
                     </Menu-item>
                 </Menu>
             </i-col>
-            <i-col :span="18">
+            <i-col :span="18" :push="3">
+                <div class="banner">
+                    <h1>管理系统</h1>
+                </div>
                 <router-view></router-view>
             </i-col>
         </Row>

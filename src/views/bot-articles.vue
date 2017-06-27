@@ -3,13 +3,18 @@
 </style>
 <template>
     <div>
+        <!--<Page :total="total" :current="currentPage" show-elevator-->
+              <!--style="padding-bottom: 10px" size="small" @on-change="changePage"></Page>-->
         <Table :columns="columns" :data="data"></Table>
+        <Page :total="total" :current="currentPage" show-elevator
+              style="padding-top: 10px" size="small" @on-change="changePage"></Page>
     </div>
 </template>
 <script>
     export default {
         data() {
             return {
+                total: 0,
                 columns: [
                     {
                         'title': '发送者',
@@ -31,6 +36,36 @@
                         'title': '时间',
                         'key': 'created_at',
                         'width': 100
+                    }, {
+                        title: '操作',
+                        width: 250,
+                        render(h, params) {
+                            const row = params.row;
+                            return [h('Button', {
+                                props: {type: 'text'},
+                                on: {
+                                    click() {
+
+                                    }
+                                }
+                            }, '发到发稿箱'),
+                                h('Button', {
+                                    props: {type: 'text'},
+                                    on: {
+                                        click() {
+
+                                        }
+                                    }
+                                }, '编辑'),
+                                h('Button', {
+                                    props: {type: 'text'},
+                                    on: {
+                                        click() {
+
+                                        }
+                                    }
+                                }, '删除')]
+                        }
                     }
                 ],
 
@@ -38,13 +73,32 @@
             }
         },
 
+        computed: {
+            currentPage() {
+                return this.$route.params.page || 1
+            }
+        },
+
+        methods: {
+            changePage(page) {
+                this.$router.push({
+                    name: 'bot-articles-page',
+                    params: {
+                        page: page
+                    }
+                })
+            }
+        },
+
         mounted() {
             this.$http.get('/bot/articles', {
                 params: {
-                    name: this.$route.params.bot
+                    name: this.$route.params.bot,
+                    page: this.currentPage - 1
                 }
             }).then(resp => {
                 this.data = resp.data.articles;
+                this.total = resp.data.total;
             });
         }
     };

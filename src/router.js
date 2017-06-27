@@ -37,7 +37,16 @@ const routers = [{
                 }, {
                     path: 'articles',
                     name: 'bot-articles',
-                    component: resolve => require(['./views/bot-articles.vue'], resolve)
+                    component: resolve => require(['./views/bot-articles.vue'], resolve),
+                    alias: 'articles/:page'
+                }, {
+                    path: 'articles/:page',
+                    name: 'bot-articles-page',
+                    component: resolve => require(['./views/bot-articles.vue'], resolve),
+                }, {
+                    path: 'article/:uid',
+                    name: 'article-editor',
+                    component: resolve => require(['./views/article-editor.vue'], resolve)
                 }
             ]
         }
