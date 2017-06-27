@@ -17,7 +17,7 @@
         padding-top: 100px;
         position: fixed;
         height: 100%;
-        background-color: #f8f8f9!important;
+        background-color: #f8f8f9 !important;
     }
 
     .menu .ivu-menu-light {
@@ -74,6 +74,9 @@
                 this.$router.push({name: 'bot-add'});
             },
             setCurrentBot(bot) {
+                if (this.currentBot === bot) {
+                    this.loadBot();
+                }
                 this.currentBot = bot;
             },
 
