@@ -4,9 +4,9 @@
 <template>
     <div>
         <!--<Page :total="total" :current="currentPage" show-elevator-->
-              <!--style="padding-bottom: 10px" size="small" @on-change="changePage"></Page>-->
+        <!--style="padding-bottom: 10px" size="small" @on-change="changePage"></Page>-->
         <Table :columns="columns" :data="data"></Table>
-        <Page :total="total" :current="currentPage" show-elevator
+        <Page :total="total" :current="currentPage" show-elevator :page-size="100"
               style="padding-top: 10px" size="small" @on-change="changePage"></Page>
     </div>
 </template>
@@ -69,7 +69,19 @@
                     }
                 ],
 
-                data: []
+                data: [],
+
+                loadData() {
+                    this.$http.get('/bot/articles', {
+                        params: {
+                            name: this.$route.params.bot,
+                            page: this.currentPage - 1
+                        }
+                    }).then(resp => {
+                        this.data = resp.data.articles;
+                        this.total = resp.data.total;
+                    });
+                }
             }
         },
 
@@ -91,15 +103,13 @@
         },
 
         mounted() {
-            this.$http.get('/bot/articles', {
-                params: {
-                    name: this.$route.params.bot,
-                    page: this.currentPage - 1
-                }
-            }).then(resp => {
-                this.data = resp.data.articles;
-                this.total = resp.data.total;
-            });
+            this.loadData();
+        },
+
+        watched: {
+            currentPage() {
+                this.loadData();
+            }
         }
     };
 </script>
