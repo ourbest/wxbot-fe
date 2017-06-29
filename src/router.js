@@ -6,6 +6,10 @@ const routers = [{
     component: (resolve) => require(['./views/index.vue'], resolve),
     children: [
         {
+            path: '',
+            component: resolve => require(['./views/main.vue'], resolve)
+        },
+        {
             path: 'add',
             name: 'bot-add',
             component: resolve => require(['./views/bot-add.vue'], resolve)
@@ -43,6 +47,10 @@ const routers = [{
                     path: 'articles/:page',
                     name: 'bot-articles-page',
                     component: resolve => require(['./views/bot-articles.vue'], resolve),
+                }, {
+                    path: 'article/view/:uid/:title',
+                    name: 'article-view',
+                    component: resolve => require(['./views/article-view.vue'], resolve)
                 }, {
                     path: 'article/:uid',
                     name: 'article-editor',

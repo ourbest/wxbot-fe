@@ -29,6 +29,8 @@ const ajax = axios.create({
 
 Vue.use(VueAxois, ajax);
 
+import ArticleLink from './views/ArticleLink.vue'
+Vue.component('ArticleLink', ArticleLink);
 
 // 路由配置
 const RouterConfig = {

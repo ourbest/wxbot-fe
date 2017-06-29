@@ -16,10 +16,6 @@
                         'key': 'name',
                         'width': 120
                     }, {
-                        'title': '性别',
-                        'key': 'sex',
-                        'width': 60
-                    }, {
                         'title': '省份',
                         'key': 'province',
                         'width': 100

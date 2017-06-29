@@ -11,60 +11,74 @@
     </div>
 </template>
 <script>
+
     export default {
         data() {
             return {
                 total: 0,
                 columns: [
                     {
-                        'title': '发送者',
-                        'key': 'sender',
-                        'width': 120
+                        title: '发送者',
+                        key: 'sender',
+                        width: 120
                     }, {
-                        'title': '文章',
-                        'key': 'title',
-                        render(h, params) {
+                        title: '文章',
+                        key: 'title',
+                        render: (h, params) => {
                             const row = params.row;
-                            return h('a', {
-                                attrs: {
+                            return h('ArticleLink', {
+                                props: {
                                     href: '/bot/article?id=' + row.id,
                                     target: '_blank'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.$router.push({
+                                            name: 'article-view',
+                                            params: {
+                                                uid: row.id,
+                                                title: row.title
+                                            }
+                                        });
+                                        return false;
+                                    }
                                 }
-                            }, row.title)
+                            }, row.title + (row.status ? ' [已发送]' : ''))
                         }
                     }, {
-                        'title': '时间',
-                        'key': 'created_at',
-                        'width': 100
+                        title: '时间',
+                        key: 'created_at',
+                        width: 100
                     }, {
                         title: '操作',
                         width: 250,
-                        render(h, params) {
+                        key: 'action',
+                        render: (h, params) => {
                             const row = params.row;
-                            return [h('Button', {
+                            return h('div', [h('Button', {
                                 props: {type: 'text'},
                                 on: {
-                                    click() {
-
+                                    click: () => {
+                                        this.sendToCutt(row);
                                     }
                                 }
                             }, '发到发稿箱'),
                                 h('Button', {
                                     props: {type: 'text'},
                                     on: {
-                                        click() {
-
+                                        click: () => {
+                                            this.$router.push({name: 'article-editor', params: {uid: row.id}});
                                         }
                                     }
                                 }, '编辑'),
                                 h('Button', {
                                     props: {type: 'text'},
                                     on: {
-                                        click() {
-
+                                        click: () => {
+                                            this.removeArticle(row);
                                         }
                                     }
-                                }, '删除')]
+                                }, '删除')]);
                         }
                     }
                 ],
@@ -92,6 +106,29 @@
         },
 
         methods: {
+            sendToCutt(row) {
+                console.log(row);
+                this.$http.post('/bot/send/cutt', {
+                    name: this.$route.params.bot,
+                    id: row.id
+                }).then(() => {
+                    row.status = 1;
+                });
+            },
+
+            removeArticle(row) {
+                let vm = this;
+                vm.$Modal.confirm({
+                    content: `确认要删除【${row.title}】吗？`,
+                    onOk: () => {
+                        vm.$http.post('/bot/article/remove', {
+                            id: row.id
+                        }).then(() => {
+                            vm.data.splice(vm.data.indexOf(row), 1)
+                        });
+                    }
+                })
+            },
             changePage(page) {
                 this.$router.push({
                     name: 'bot-articles-page',

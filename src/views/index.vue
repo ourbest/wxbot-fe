@@ -43,7 +43,7 @@
             </i-col>
             <i-col :span="18" :push="3">
                 <div class="banner">
-                    <h1>管理系统</h1>
+                    <h1>管理系统 <span v-if="master">监控微信 - {{master}}</span></h1>
                 </div>
                 <router-view></router-view>
             </i-col>
@@ -56,7 +56,8 @@
     export default {
         data() {
             return {
-                bots: []
+                bots: [],
+                master: ''
             }
         },
         computed: {
@@ -67,8 +68,13 @@
                 set(bot) {
                     this.$store.commit('open', bot);
                 }
+            },
+
+            reload() {
+                return this.$store.state.reload;
             }
         },
+
         methods: {
             addBot() {
                 this.$router.push({name: 'bot-add'});
@@ -92,6 +98,7 @@
                 this.$http.get('/bot/bots')
                     .then(resp => {
                         this.bots = resp.data.bots
+                        this.master = resp.data.master
                     });
             },
 
@@ -106,6 +113,10 @@
         watch: {
             currentBot() {
                 this.loadBot();
+            },
+
+            reload() {
+                this.loadBots();
             }
         },
 
