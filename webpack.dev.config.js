@@ -20,6 +20,7 @@ module.exports = merge(webpackBaseConfig, {
     devServer: {
         proxy: {
             '/bot': {
+                // target: 'http://wxbot.daocloudapp.com'
                 target: 'http://10.0.1.148:5100'
             }
         }

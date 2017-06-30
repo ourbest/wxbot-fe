@@ -6,7 +6,7 @@
         <!--<Page :total="total" :current="currentPage" show-elevator-->
         <!--style="padding-bottom: 10px" size="small" @on-change="changePage"></Page>-->
         <Table :columns="columns" :data="data"></Table>
-        <Page :total="total" :current="currentPage" show-elevator :page-size="100"
+        <Page :total="total" :current="currentPage" show-elevator :page-size="10"
               style="padding-top: 10px" size="small" @on-change="changePage"></Page>
     </div>
 </template>
@@ -143,7 +143,7 @@
             this.loadData();
         },
 
-        watched: {
+        watch: {
             currentPage() {
                 this.loadData();
             }
